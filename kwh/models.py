@@ -1,5 +1,6 @@
 from django.db import models
 # Create your models here.
+
 class Payload(models.Model):
     devId = models.CharField(unique=True)
     devTime = models.DatetimeField(unique=True)
