@@ -1,9 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
-
+from .views import addFemsTransData
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('kwh/', include('kwh.urls')),
-    path('temp/', include('temp.urls')),
+    path('monitor/', addFemsTransData.as_view()),
 ]
