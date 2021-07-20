@@ -5,13 +5,12 @@ from .models import FemsTrans,FemsPayload
 class kwhFemsPayload(serializers.ModelSerializer):
     # dev = serializers.CharField(required=True)
     # dev_time = serializers.CharField(required=True)
-    payload_data = serializers.ListField()
     class Meta:
         model = FemsPayload
         fields =  ('dev','dev_time','payload_data')
 class kwhFemsTrans_serializer(serializers.ModelSerializer):
 
-    payload = kwhFemsPayload(many=True)
+    payload = kwhFemsPayload(many=True,read_only=True)
 
     class Meta:
         model = FemsTrans
