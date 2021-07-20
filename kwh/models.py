@@ -48,7 +48,7 @@ class FemsPayload(models.Model):
     site = models.ForeignKey('FemsTrans', related_name='siteid', on_delete= models.DO_NOTHING)
     dev = models.ForeignKey('FemsTrans',related_name='devid',on_delete= models.DO_NOTHING)
     dev_time = models.ForeignKey('FemsTrans',related_name='devtime' ,on_delete= models.DO_NOTHING, db_column='dev_time')
-    payload_data = models.JSONField()
+    payload_data = models.TextField()
 
     class Meta:
         db_table = 'fems_payload'

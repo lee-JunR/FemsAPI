@@ -8,7 +8,10 @@ import json
 class addFemsTransData(APIView):
     def post(self, request):
         kwhFemsTrans = kwhFemsTrans_serializer(data=request.data)
-        json_data = request.data
+        kwhFemsTrans.is_valid()
+        json_data = str(request.data)
+        d_time = request.data['payload'][0]['dev']
+        json_data = json_data.replace("dev_time","asdf")
         print(json_data)
 
         if kwhFemsTrans.is_valid():
