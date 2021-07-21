@@ -1,41 +1,28 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import FemsTrans
-from .serializers import kwhFemsTrans_serializer
-import json
+from .serializers import kwhFemsPayload, kwhFemsTrans
 
 
 
 class addFemsTransData(APIView):
     def post(self, request):
-        # kwhFemsTrans = kwhFemsTrans_serializer(data=request.data)
-        json_data = str(request.data)
+        # post로 들어오는 json의 형식 맞추기
         for i in range(len(request.data['payload'])):
             json_data1 = request.data['payload'][i]
-            c = dict({key: value for key, value in json_data1.items() if key == 'dev' or key == 'dev_time'})
-            d = str({key: value for key, value in json_data1.items() if key != 'dev' and key != 'dev_time'})
+            c = dict({key: value for key, value in json_data1.items() if key == 'dev_id' or key == 'dev_time'})
+            d = str({key: value for key, value in json_data1.items() if key != 'dev_id' and key != 'dev_time'})
             c['payload_data'] = d
             request.data['payload'][i] = c
-        # json_data1 = request.data['payload'][1]
-        # print(json_data1)
-        # print()
-        # c = dict({key: value for key, value in json_data1.items() if key == 'dev' or key == 'dev_time'})
-        # d = str({key: value for key, value in json_data1.items() if key != 'dev' and key != 'dev_time'})
-        # c['payload_data'] = d
-        # request.data['payload'][1]=c
-        print(request.data)
-        # print(json_data)
-        # d_time = '\'dev_time\': \'' + str(request.data['payload'][0]['dev_time'] + '\',')
-        # b_time = d_time.replace(',','') + ', \'payload_data\': \"'
-        # json_data = json_data.replace(d_time,b_time)
-        # json_data = json_data.replace('\'}','\' \"}')
-        # json_data = eval(json_data)
-        # print(json_data)
-        kwhFemsTrans = kwhFemsTrans_serializer(data=request.data)
-        if kwhFemsTrans.is_valid():
-            kwhFemsTrans.save()
-            return Response(kwhFemsTrans.data, status=status.HTTP_201_CREATED)
+        json_data1 = dict({key: value for key, value in request.data.items() if key == 'transaction_id' or key == 'site_id' or key == 'eng_type'or key == 'version'})
+        json_data2 = dict({key: value for key, value in request.data['payload'][0].items() if key == 'dev_id' or key == 'dev_time' or key == 'payload_data'})
+        print(json_data2)
+        kwhFemsTrans_serializer = kwhFemsTrans(data=json_data1)
+        kwhFemsPayload_serializer = kwhFemsPayload(data=json_data2)
+        if kwhFemsTrans_serializer.is_valid() and kwhFemsPayload_serializer.is_valid():
+            kwhFemsTrans_serializer.save()
+            kwhFemsPayload_serializer.save()
+            return Response(kwhFemsTrans_serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return Response(kwhFemsTrans.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(kwhFemsTrans_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

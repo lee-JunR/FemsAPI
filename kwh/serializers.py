@@ -7,11 +7,12 @@ class kwhFemsPayload(serializers.ModelSerializer):
     # dev_time = serializers.CharField(required=True)
     class Meta:
         model = FemsPayload
-        fields =  ('dev','dev_time','payload_data')
-class kwhFemsTrans_serializer(serializers.ModelSerializer):
+        fields = ('dev_id','dev_time','payload_data')
 
-    payload = kwhFemsPayload(many=True,read_only=True)
+class kwhFemsTrans(serializers.ModelSerializer):
 
+    # payload = kwhFemsPayload(many=True)
+    # payload = serializers.PrimaryKeyRelatedField(many=True,read_only=True)
     class Meta:
         model = FemsTrans
-        fields = ('transaction_id', 'site_id', 'eng_type', 'version','payload')
+        fields = ('transaction_id', 'site_id', 'eng_type', 'version')
